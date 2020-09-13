@@ -1,0 +1,538 @@
+<!DOCTYPE html><html lang="zh-CN"><!--
+             -. .                                        
+       _____   ',' ,                                    
+     ,'     ,'   ', ',                                  
+   ,'     ,'      |  |                                  
+   \       \       |  |                                  
+     \ /^\   \    ,' ,'                                  
+           \   \ ,' ,'      L'Internationale,            
+     / ~-.___\.-'  ,'            Sera le genre humain.   
+   /   .______.- ~ \                                     
+ /   /'          \   \                                   
+ \./               \/'                                   
+                                                         
+--><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="pengliang"><title>笔记-JS继承 · 银之匙</title><meta name="description" content="(function(){
+
+        let getLyric = id =&gt; {
+          return new Promise((resolve, reject) =&gt; {
+            fetch(&quot;https://api.imjad.cn/cloudmusic/?t"><meta name="keywords" content="vue"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/valine.min.js"></script><meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head><body><span class="donate-address">唯一指定邮箱：penglianger@qq.com</span><div id="stage" class="container"><div class="row"><div id="side-bar" class="col-sm-3 col-xs-12 side-container invisible"><div class="vertical-text site-title"><h3 tabindex="-1" class="site-title-small"><a href="/" class="a-title">不要变成记录在本子上的人生</a></h3><h1 tabindex="-1" class="site-title-large"><a href="/" class="a-title">银之匙</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div id="site-nav" class="site-title-links"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="soc"><a href="https://github.com/Samlldevel" target="_blank" rel="noopener noreferrer"><i class="fa fa-github">&nbsp;</i></a><a href="https://twitter.com/Samlldevel" target="_blank" rel="noopener noreferrer"><i class="fa fa-twitter">&nbsp;</i></a><a href="https://github.com/PL-FE/atom.xml" target="_blank" rel="noopener noreferrer"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2020&nbsp;<a target="_blank" href="https://github.com/PL-FE" rel="noopener noreferrer">pengliang</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div id="main-container" class="col-sm-9 col-xs-12 main-container invisible"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><h1 class="post-title">笔记-JS继承</h1><p class="post-meta"><span class="date meta-item">发布于&nbsp;2020-08-01</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a href="/categories/JavaScript/" title="JavaScript" class="a-tag">JavaScript</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a href="/tags/知识点/" title="知识点" class="a-tag">知识点</a><span>&nbsp;</span><a href="/tags/继承/" title="继承" class="a-tag">继承</a><span>&nbsp;</span></span></p><p class="post-abstract"><p><img src="./JS%E7%BB%A7%E6%89%BF/0.jpg" alt="梦琴"></p>
+
+    <div class="cplayer-template"
+      id="cplayer-37209393"
+      data-id="cplayer-37209393"
+      data-playlist=%5B%7B%22name%22%3A%22loading...%22%2C%22artist%22%3A%22loading...%22%7D%5D
+      data-ids=[530986963,531040878]
+      data-autoplay="false"
+      style="position: relative"
+    ></div>
+    <script>
+      (function(){
+
+        let getLyric = id => {
+          return new Promise((resolve, reject) => {
+            fetch("https://api.imjad.cn/cloudmusic/?type=lyric&id=" + id).then(res => {
+              return res.json()
+            }).then(data => {
+              // console.log(data)
+              if(!data.lrc){
+                data = Object.assign(data, {
+                  lrc: {lyric: '[00:00.00]找不到歌词的说…(⊙﹏⊙)[99:00.00]'},
+                  tlyric: {lyric: '[00:00.00]翻译不存在的说…╮(╯▽╰)╭[99:00.00]'}
+                })
+              }
+              let obj = {
+                lyric: data.lrc.lyric,
+                tlyric: data.tlyric.lyric
+              }
+              resolve(obj);
+            })
+          })
+        }
+
+        function loadcplayer() {
+          if (typeof window.cplayerList === 'undefined') window.cplayerList = {};
+          if (typeof window.cplayerList["cplayer-37209393"] !== 'undefined') return;
+          if (!cplayer.prototype.add163) cplayer.prototype.add163 = async function add163(id) {
+            if (!id) throw new Error("Unable Property.");
+            let lyric = await getLyric(id);
+            // console.log(lyric)
+
+            return fetch("https://api.imjad.cn/cloudmusic/?type=detail&id=" + id).then(function(res){return res.json()}).then(function(data){
+              let obj = {
+                name: data.songs[0].name,
+                artist: data.songs[0].ar.map(function(ar){ return ar.name }).join(','),
+                poster: data.songs[0].al.picUrl,
+                lyric: lyric.lyric,
+                sublyric: lyric.tlyric,
+                src: 'https://api.imjad.cn/cloudmusic/?type=song&raw=true&id=' + id
+              }
+              this.add(obj);
+              return obj;
+            }.bind(this))
+          }
+
+          window.cplayerList["cplayer-37209393"] = new cplayer({
+            element: document.getElementById("cplayer-37209393"),
+            playlist: [{"name":"loading...","artist":"loading..."}],
+            generateBeforeElement: false,
+            deleteElementAfterGenerate: false,
+            autoplay: false,
+            zoomOutKana: true,
+            style: `c-player {
+                      font-size: 16px !important;
+                      position: relative;
+                      left: 50%;
+                      transform: translateX(-50%);
+                      width: auto;
+                      max-width: 550px;
+                      margin: 30px auto;
+                    }
+                    c-player .cp-controls{
+                      user-select: none;
+                    }
+                    c-player .cp-lyric{
+                      width: 100%;
+                      margin: 0.41667em 0;
+                    }
+                    c-player .cp-play-button .cp-play-icon.cp-play-icon-paused {
+                      margin-left: 0.8em;
+                    }
+                    @media (max-width: 768px) {
+                      c-player{
+                        font-size: 12px !important;
+                        left: auto;
+                        transform: none;
+                        width: 100%;
+                        margin: 10px auto;
+                      }
+                      c-player .cp-mainbody{
+                        min-height: 5.16667em;
+                      }
+                      c-player .cp-poster{
+                        width: 5.16667em;
+                        height: 5.16667em;
+                      }
+                      c-player .cp-center-container{
+                        height: 5.16667em;
+                      }
+                      c-player .cp-play-button, c-player .cp-volume-button, c-player .cp-prev-button, c-player .cp-list-button, c-player .cp-mode-button, c-player .cp-next-button{
+                        width: 1.54167em;
+                        height: 1.54167em;
+                      }
+                      c-player .cp-icon, c-player .cp-prev-icon, c-player .cp-next-icon, c-player .cp-volume-icon, c-player .cp-random-icon, c-player .cp-single-icon, c-player .cp-loop-icon, c-player .cp-list-icon{
+                        height: 1.54167em;
+                        width: 1.54167em;
+                      }
+                      c-player .cp-play-button{
+                        height: 2.8em;
+                        width: 2.8em;
+                      }
+                      c-player .cp-play-button .cp-play-icon{
+                        margin: 0.8em;
+                      }
+                      c-player .cp-play-button .cp-play-icon.cp-play-icon-paused {
+                        margin: 0.7875em;
+                        margin-left: 1em;
+                      }
+                      c-player .cp-volume-icon {
+                        width: 1.76667em;
+                      }
+                      c-player .cp-list-button {
+                        width: 1.54167em;
+                        height: 1.54167em;
+                      }
+                      c-player .cp-mode-button {
+                        width: 1.54167em;
+                        height: 1.54167em;
+                      }
+                    }
+                    `
+          });
+
+          window.cplayerList["cplayer-37209393"].add163(530986963),window.cplayerList["cplayer-37209393"].add163(531040878)
+
+          let player = window.cplayerList["cplayer-37209393"]
+          player.to(1)
+          player.remove(player.playlist[0])
+        }
+        
+        if (typeof window.cplayer === 'undefined' && !document.getElementById("cplayer-script")) {
+          var js = document.createElement("script");
+          js.src = 'https://cdn.jsdelivr.net/gh/MoePlayer/cPlayer/dist/cplayer.js';
+          js.id = "cplayer-script";
+          js.addEventListener("load", loadcplayer);
+          document.body.appendChild(js);
+        } else {
+          window.addEventListener("load", loadcplayer);
+        }
+      })()
+    </script>
+
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在开发大型项目的时候，我们经常需要用到对象，不论是使用内置对象、扩展对象或者自定义对象等，都是为了很好的把属性和方法封装在一起。所以本次我将 js 原型链以及继承自我总结一下，加强理解，如理解有误，欢迎讨论交流。</p>
+<p>一张图补一下 <code>原型链</code> 的知识, 图片来自掘金作者<a href="https://juejin.im/post/6844903826143592461" target="_blank" rel="noopener">一灯</a></p>
+<p><img src="./JS%E7%BB%A7%E6%89%BF/%E5%8E%9F%E5%9E%8B%E9%93%BE.jpg" alt="原型链"></p>
+<p>关于 JS 继承分为 6 种</p>
+<ul>
+<li>原型链继承</li>
+<li>借用构造函数继承</li>
+<li>组合继承（组合原型链继承和借用构造函数继承）（常用）</li>
+<li>原型式继承</li>
+<li>寄生式继承</li>
+<li>寄生组合式继承（常用）</li>
+</ul>
+<hr>
+<h4 id="一、-原型链继承"><a href="#一、-原型链继承" class="headerlink" title="一、 原型链继承"></a>一、 原型链继承</h4><blockquote>
+<p>将构造函数的原型设置为另一个构造函数的实例对象，这样就可以继承另一个原型对象的所有属性和方法，可以继续往上，最终形成原型链。</p>
+</blockquote>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// 首先定义了两个类型 Person 和 Teacher。</span>
+<span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">function</span> <span class="token function">Person</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name
+  <span class="token keyword">this</span><span class="token punctuation">.</span>todo <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>sth<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>sth<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 老师</span>
+<span class="token keyword">function</span> <span class="token function">Teacher</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> <span class="token string">'张三'</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// Person 原型 age 属性赋值</span>
+Person<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">23</span>
+
+<span class="token comment" spellcheck="true">// 通过创建 Person 的实例（new Person()），并将该实例赋给 Teacher 的原型 （Teacher.prototype） 的方式继承了 Person。</span>
+<span class="token comment" spellcheck="true">// 即：Teacher 的原型 （Teacher.prototype） = Person 的实例（new Person()），实现继承</span>
+Teacher<span class="token punctuation">.</span>prototype <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// new 一个数学老师出来</span>
+<span class="token keyword">const</span> MathTeacher <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Teacher</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 此时存在于 Person 中实例中的所有属性和方法，也存在于 Teacher.prototype 中。</span>
+<span class="token comment" spellcheck="true">// Teacher的实例 MathTeacher 指向 Teacher 的原型 Teacher.prototype，Teacher.prototype 又指向 Person 的原型。</span>
+
+<span class="token comment" spellcheck="true">// MathTeacher 本身没有 todo(),todo 来自 Teacher.prototype</span>
+MathTeacher<span class="token punctuation">.</span><span class="token function">todo</span><span class="token punctuation">(</span><span class="token string">'教数学'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 教数学</span>
+
+<span class="token comment" spellcheck="true">// MathTeacher 没有 name， 所以输出的是 Teacher 的 name</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>MathTeacher<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 张三</span>
+
+<span class="token comment" spellcheck="true">// MathTeacher、Teacher.prototype（等同Person 的实例）都没有 age 属性， 这里的 age 属性来自 Person.prototype</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>MathTeacher<span class="token punctuation">.</span>age<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 23</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>很明显，他们的关系就像是一条链，父类新增原型方法/原型属性，子类都能访问到，实现起来也很简单。<br>这就是 <code>原型链继承</code> 的特点。</p>
+<p>缺点是：</p>
+<ol>
+<li>无法实现多继承，因为是一条链。</li>
+<li>原型方法被所有实例共享，不容易维护</li>
+<li>无法向父类构造函数传参</li>
+</ol>
+<hr>
+<h4 id="二、-借用构造函数继承"><a href="#二、-借用构造函数继承" class="headerlink" title="二、 借用构造函数继承"></a>二、 借用构造函数继承</h4><blockquote>
+<p>为了解决原型中包含引用类型值的问题，开始使用借用构造函数，也叫伪造对象或经典继承</p>
+</blockquote>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">function</span> <span class="token function">Person</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name
+  <span class="token keyword">this</span><span class="token punctuation">.</span>todo <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>sth<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>sth<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  Person<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token string">'王小'</span><span class="token punctuation">)</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">16</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> S1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 王小</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1<span class="token punctuation">.</span>age<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 16</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1<span class="token punctuation">.</span>sex<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//undefined</span>
+S1<span class="token punctuation">.</span><span class="token function">todo</span><span class="token punctuation">(</span><span class="token string">'222'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// '222'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>RT，借用了父类的构造函数，<br>关键代码是</p>
+<pre class="line-numbers language-js"><code class="language-js">Person<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token string">'王小'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>用 <a href="https://www.w3school.com.cn/js/js_function_call.asp" target="_blank" rel="noopener">.call()</a> 和 <a href="https://www.w3school.com.cn/js/js_function_apply.asp" target="_blank" rel="noopener">.apply()</a> 将父类构造函数引入子类函数（在子类函数中做了父类函数的自执行（复制））</p>
+<p>回头来看，第二种是为了解决 <code>原型链继承</code> 而诞生的</p>
+<p>优点：</p>
+<ol>
+<li>使用多个<code>call()</code> 函数，能够实现多继承</li>
+<li>只继承了父类构造函数的属性，解决了实例共享父类引用问题</li>
+<li><code>call()</code> 函数支持传参，可以向父类传递参数</li>
+</ol>
+<p>看起来很不多，毕竟比原型链讲究了那么些，但是很快又发现了新的问题</p>
+<p>缺点：</p>
+<ol>
+<li>很容易发现并不是父类的实例（毕竟是借的，不是亲生的）</li>
+</ol>
+<pre class="line-numbers language-js"><code class="language-js">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1 <span class="token keyword">instanceof</span> <span class="token class-name">Person</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// false</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1 <span class="token keyword">instanceof</span> <span class="token class-name">Student</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>每次用每次都要重新调用，无法实现构造函数的复用（毕竟是别人的构造函数）</li>
+<li>每个子类都有父类实例函数的副本，影响性能（每个人都借一次，印象不好）</li>
+</ol>
+<hr>
+<h4 id="三、-组合继承（组合原型链继承和借用构造函数继承）（常用）"><a href="#三、-组合继承（组合原型链继承和借用构造函数继承）（常用）" class="headerlink" title="三、 组合继承（组合原型链继承和借用构造函数继承）（常用）"></a>三、 组合继承（组合原型链继承和借用构造函数继承）（常用）</h4><blockquote>
+<p>也叫伪经典继承，将原型链和借用构造函数的技术组合到一块。使用原型链实现对原型属性和方法的继承，而通过构造函数来实现对实例属性的继承。</p>
+</blockquote>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">function</span> <span class="token function">Person</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name
+  <span class="token keyword">this</span><span class="token punctuation">.</span>todo <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>sth<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>sth<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+Person<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>sex <span class="token operator">=</span> <span class="token number">1</span>
+
+<span class="token keyword">function</span> <span class="token function">Student</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Person<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">16</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 原型链继承</span>
+Student<span class="token punctuation">.</span>prototype <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">'原始人'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 可传参</span>
+<span class="token keyword">const</span> S1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token string">'王晓'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> S2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 从子类构造函数中获取</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 王晓</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1<span class="token punctuation">.</span>age<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 16</span>
+<span class="token comment" spellcheck="true">// 通过父类构造函数获取</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S2<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 原始人</span>
+
+<span class="token comment" spellcheck="true">// 通过父类原型链获取</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S2<span class="token punctuation">.</span>sex<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>下面是实例 S2 继承关系概要</p>
+<pre class="line-numbers language-json"><code class="language-json"> Student <span class="token punctuation">{</span>
+  age<span class="token operator">:</span> <span class="token number">16</span><span class="token punctuation">,</span>
+  __proto__<span class="token operator">:</span> <span class="token punctuation">{</span>
+          name<span class="token operator">:</span> <span class="token string">"原始人"</span><span class="token punctuation">,</span>
+          todo<span class="token operator">:</span> ƒ (sth<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          __proto__<span class="token operator">:</span> <span class="token punctuation">{</span>
+                  sex<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+                  constructor<span class="token operator">:</span> ƒ Person(name<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                  __proto__<span class="token operator">:</span> Object
+          <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从实例中看到 <code>Student 构造函数</code> 中无 <code>name</code> 属性，所以会顺着 <code>原型链</code> 去查看，直到找到为止<br>在 <code>Person 构造函数</code> 找到了 <code>name</code> 属性 ,在 <code>Person 的原型</code> 找到了 <code>sex</code> 属性</p>
+<p>组合继承结合了 <code>借用构造函数</code> 和 <code>原型链接触</code> 这两种方式，实现传参和复用父类的实例</p>
+<p>优点：</p>
+<ul>
+<li>继承父类属性，可传参以及复用父类的实例</li>
+<li>每个实例引入的构造函数的属性都是私有的</li>
+</ul>
+<p>缺点:</p>
+<ul>
+<li>调用了两次父类构造函数（一次是创建子类原型时，另一次是子类构造函数的内部）</li>
+<li>最终生成的子类型会包含了父类型的全部实例属性，需要重写这些属性（如下 S1 继承关系可见）</li>
+</ul>
+<p>下面是实例 S1 继承关系概要</p>
+<pre class="line-numbers language-json"><code class="language-json"> Student <span class="token punctuation">{</span>
+  age<span class="token operator">:</span> <span class="token number">16</span><span class="token punctuation">,</span>
+  name<span class="token operator">:</span> <span class="token string">"王晓"</span><span class="token punctuation">,</span>
+  todo<span class="token operator">:</span> ƒ (sth<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  __proto__<span class="token operator">:</span> <span class="token punctuation">{</span>
+          name<span class="token operator">:</span> <span class="token string">"原始人"</span><span class="token punctuation">,</span>
+          todo<span class="token operator">:</span> ƒ (sth<span class="token punctuation">)</span><span class="token punctuation">,</span>
+          __proto__<span class="token operator">:</span> <span class="token punctuation">{</span>
+                  sex<span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+                  constructor<span class="token operator">:</span> ƒ Person(name<span class="token punctuation">)</span><span class="token punctuation">,</span>
+                  __proto__<span class="token operator">:</span> Object
+          <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<h4 id="四、-原型式继承"><a href="#四、-原型式继承" class="headerlink" title="四、 原型式继承"></a>四、 原型式继承</h4><blockquote>
+<p>不自定义类型的情况下，临时创建一个构造函数，借助已有的对象作为临时构造函数的原型，然后在此基础实例化对象，并返回。</p>
+</blockquote>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// 函数容器 本质上是object()对传入其中的对象执行了一次浅复制</span>
+<span class="token keyword">function</span> <span class="token function">content</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">function</span> <span class="token function">F</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  F<span class="token punctuation">.</span>prototype <span class="token operator">=</span> obj
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">F</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">function</span> <span class="token function">Person</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">10</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>likes <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'吃饭'</span><span class="token punctuation">,</span> <span class="token string">'lol'</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+Person<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>sex <span class="token operator">=</span> <span class="token number">0</span>
+
+<span class="token keyword">const</span> p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> stu <span class="token operator">=</span> <span class="token function">content</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+<span class="token keyword">const</span> stu2 <span class="token operator">=</span> <span class="token function">content</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>stu<span class="token punctuation">.</span>age<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 10</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>stu<span class="token punctuation">.</span>sex<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 0</span>
+stu<span class="token punctuation">.</span>likes<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token string">'睡觉'</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 引用类型会受影响</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>stu2<span class="token punctuation">.</span>likes<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// [ '吃饭', 'lol', '睡觉' ]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>主要也是通过原型链继承，适用于让一个对象与另一个对象保持类似的情况</p>
+<p>缺点和原型链继承缺点类似</p>
+<ul>
+<li>所有实例共享，引用类型会相互影响</li>
+<li>无法复用</li>
+</ul>
+<p><code>注意:</code></p>
+<p>ES5 通过新增 Object.create()方法规范化了原型式继承。这个方法接收两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象。在传入一个参数的情况下，Object.create()与这里的 content()方法的行为相同。第二个参数与 Object.defineProperties()方法的第二个参数格式相同：每个属性都是通过自己的描述符定义的。</p>
+<hr>
+<h4 id="五、-寄生式继承（增强对象"><a href="#五、-寄生式继承（增强对象" class="headerlink" title="五、 寄生式继承（增强对象)"></a>五、 寄生式继承（增强对象)</h4><blockquote>
+<p>在原型式继承得到对象的基础上，在内部再以某种方式来增强对象，然后返回。</p>
+</blockquote>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// 函数容器</span>
+<span class="token keyword">function</span> <span class="token function">content</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">function</span> <span class="token function">F</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  F<span class="token punctuation">.</span>prototype <span class="token operator">=</span> obj
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">F</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 对象加工厂</span>
+<span class="token keyword">function</span> <span class="token function">createStudent</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> clone <span class="token operator">=</span> <span class="token function">content</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span>
+  clone<span class="token punctuation">.</span>sayHi <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'hi'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">return</span> clone
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">function</span> <span class="token function">Person</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">10</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> stu1 <span class="token operator">=</span> <span class="token function">createStudent</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+
+stu1<span class="token punctuation">.</span><span class="token function">sayHi</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// hi</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其实就是 <code>原型式继承</code> 的增强版，扩展了对象的属性和方法，缺点还是没有改进</p>
+<hr>
+<h4 id="六、-寄生组合式继承（常用）"><a href="#六、-寄生组合式继承（常用）" class="headerlink" title="六、 寄生组合式继承（常用）"></a>六、 寄生组合式继承（常用）</h4><blockquote>
+<p>组合继承是 JS 中最常用的继承模式，但其实它也有不足，组合继承无论什么情况下都会调用两次超类型的构造函数，并且创建的每个实例中都要屏蔽超类型对 象的所有实例属性。<br>寄生组合式继承就解决了上述问题，被认为是最理想的继承范式。</p>
+</blockquote>
+<p>因为使用 <code>组合继承</code> ，调用了两次 Person 构造函数，现在出现了两组属性，一组在实例上，一组在 Student 原型中。</p>
+<p>回顾一下组合继承基本结构</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">function</span> <span class="token function">Person</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name
+<span class="token punctuation">}</span>
+
+<span class="token keyword">function</span> <span class="token function">Student</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  Person<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 原型链继承</span>
+Student<span class="token punctuation">.</span>prototype <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">'原始人'</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 寄生组合式继承 将会替换这行</span>
+
+<span class="token comment" spellcheck="true">// ...</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>寄生组合式继承</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">function</span> <span class="token function">content</span><span class="token punctuation">(</span>o<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">function</span> <span class="token function">F</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+  F<span class="token punctuation">.</span>prototype <span class="token operator">=</span> o
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">F</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 其实只是需要父类的一个副本而已</span>
+<span class="token keyword">function</span> <span class="token function">inheritPrototype</span><span class="token punctuation">(</span>person<span class="token punctuation">,</span> student<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// 是创建超类型原型的一个副本</span>
+  <span class="token keyword">var</span> prototype <span class="token operator">=</span> <span class="token function">content</span><span class="token punctuation">(</span>person<span class="token punctuation">.</span>prototype<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 创建对象</span>
+
+  <span class="token comment" spellcheck="true">// 为创建的副本添加 constructor 属性，从而弥补因重写原型而失去的默认的 constructor 属性</span>
+  prototype<span class="token punctuation">.</span>constructor <span class="token operator">=</span> student <span class="token comment" spellcheck="true">// 增强对象</span>
+
+  <span class="token comment" spellcheck="true">// 将新创建的对象（即副本）赋值给子类型的原型</span>
+  student<span class="token punctuation">.</span>prototype <span class="token operator">=</span> prototype <span class="token comment" spellcheck="true">// 指定对象</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">function</span> <span class="token function">Person</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name
+  <span class="token keyword">this</span><span class="token punctuation">.</span>todo <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span>sth<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>sth<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+Person<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>sex <span class="token operator">=</span> <span class="token number">1</span>
+
+<span class="token keyword">function</span> <span class="token function">Student</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Person<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> <span class="token number">16</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// Student.prototype = new Person('原始人') // 寄生组合式继承 将会替换这行</span>
+<span class="token function">inheritPrototype</span><span class="token punctuation">(</span>Person<span class="token punctuation">,</span> Student<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 这一句，替代了组合继承中的SubType.prototype = new Person()</span>
+
+<span class="token comment" spellcheck="true">// 可传参</span>
+<span class="token keyword">const</span> S1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token string">'王晓'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> S2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 从子类构造函数中获取</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 王晓</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S1<span class="token punctuation">.</span>age<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 16</span>
+<span class="token comment" spellcheck="true">// 通过父类构造函数获取</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S2<span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// undefined ,没有往父类构造函数传参</span>
+
+<span class="token comment" spellcheck="true">// 通过父类原型链获取</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>S2<span class="token punctuation">.</span>sex<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个例子的高效率体现在它只调用了一次 <code>Person 构造函数</code>，并且因此避免了 <code>Student.prototype</code> 上面创建不必要的、多余的属性。与此同时，原型链还能保持不变；因此，还能够正常使用 <code>instanceof</code> 和 <code>isPrototypeOf()</code>。</p>
+<hr>
+<h4 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h4><p>关键字 class 从 ES6 开始正式被引入到 JavaScript 中。class 的目的就是让定义类更简单</p>
+<pre class="line-numbers language-js"><code class="language-js"><span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span>age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age
+  <span class="token punctuation">}</span>
+
+  <span class="token function">hello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'输出年龄'</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>age<span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment" spellcheck="true">// 静态方法</span>
+  <span class="token keyword">static</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'static foo'</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Student</span> <span class="token keyword">extends</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+  <span class="token function">constructor</span><span class="token punctuation">(</span>age<span class="token punctuation">,</span> name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// java 中如果不写 默认会自动生成，但是 js class super 必须在第一且不可省，</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>age<span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 用 super 调用父类的构造方法!</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name
+  <span class="token punctuation">}</span>
+  <span class="token function">hi</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// super.hello()就相当于a.prototype.hello()</span>
+    <span class="token comment" spellcheck="true">// this 指向子类</span>
+    <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">hello</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">var</span> s <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Student</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span>
+
+s<span class="token punctuation">.</span><span class="token function">hi</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// 输出年龄 16</span>
+
+Person<span class="token punctuation">.</span><span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">// static foo</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><p><a href="https://blog.csdn.net/longyin0528/article/details/80504270" target="_blank" rel="noopener">JS 实现继承的 6 种方式</a><br><a href="https://github.com/longyincug/Notebook/blob/master/src/JavaScript%E9%AB%98%E7%BA%A7%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1.md/#6c">JavaScript 高级程序设计: 继承</a><br><a href="https://blog.csdn.net/yingleiming/category_9935106.html" target="_blank" rel="noopener">实现继承的方式</a></p>
+</p></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/%E7%BB%84%E5%90%88%E6%8E%92%E5%88%97.html" title="笔记-组合排列"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 笔记-组合排列</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/Promise%E5%92%8CAsync%E4%B8%80%E6%AD%A5%E5%88%B0%E4%BD%8D.html" title="笔记-Promise和Async一步到位">下一篇: 笔记-Promise和Async一步到位&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div><a id="comments"></a><div id="valine-container"></div><script>(function(){
+    if(typeof Valine !== 'undefined'){
+        new Valine({
+            el:'#valine-container',
+            appId: 'C5UQwaddmDNfGT2GyHq1RKN4-gzGzoHsz',
+            appKey: 'nwu3U2sv3JcUcitnVTaO22GS',
+            path: window.location.pathname,
+            avatar:'robohash',
+            serverURLs: 'https://leancloud.pengliang.online'
+        })
+    }
+}())
+</script></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2020&nbsp;<a target="_blank" href="https://github.com/PL-FE" rel="noopener noreferrer">pengliang</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.min.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"live2d_models/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/live2d_models/xxban.model.json"},"display":{"position":"right","width":325,"height":300,"hOffset":0,"vOffset":0},"log":false});</script></body></html>

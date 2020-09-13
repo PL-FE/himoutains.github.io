@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="zh-CN"><!--
+             -. .                                        
+       _____   ',' ,                                    
+     ,'     ,'   ', ',                                  
+   ,'     ,'      |  |                                  
+   \       \       |  |                                  
+     \ /^\   \    ,' ,'                                  
+           \   \ ,' ,'      L'Internationale,            
+     / ~-.___\.-'  ,'            Sera le genre humain.   
+   /   .______.- ~ \                                     
+ /   /'          \   \                                   
+ \./               \/'                                   
+                                                         
+--><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="pengliang"><title>Chrome Devtools的调试技巧 · 银之匙</title><meta name="description" content="前言
+我们每天都在写 bug 代码，那么拥有一身流畅的调试本领是十分重要的，下面是我总结一些实用的调试技巧，使无论在开发环境、生产环境都能够第一时间定位问题
+
+
+    
+    
+      (function(){
+
+        let getLyric = id =&gt; {
+        "><meta name="keywords" content="vue"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/bootstrap.min.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="stylesheet" href="/css/style.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><script src="/js/valine.min.js"></script><meta name="generator" content="Hexo 4.2.1"><link rel="stylesheet" href="/css/prism.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><script src="/js/prism.js"></script>
+<script src="/js/prism-line-numbers.min.js"></script></head><body><span class="donate-address">唯一指定邮箱：penglianger@qq.com</span><div id="stage" class="container"><div class="row"><div id="side-bar" class="col-sm-3 col-xs-12 side-container invisible"><div class="vertical-text site-title"><h3 tabindex="-1" class="site-title-small"><a href="/" class="a-title">不要变成记录在本子上的人生</a></h3><h1 tabindex="-1" class="site-title-large"><a href="/" class="a-title">银之匙</a></h1><!--h6(onclick="triggerSiteNav()") Trigger--></div><br class="visible-lg visible-md visible-sm"><div id="site-nav" class="site-title-links"><ul><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="/categories">分类</a></li><li><a href="/tags">标签</a></li><li class="soc"><a href="https://github.com/Samlldevel" target="_blank" rel="noopener noreferrer"><i class="fa fa-github">&nbsp;</i></a><a href="https://twitter.com/Samlldevel" target="_blank" rel="noopener noreferrer"><i class="fa fa-twitter">&nbsp;</i></a><a href="https://github.com/PL-FE/atom.xml" target="_blank" rel="noopener noreferrer"><i class="fa fa-rss">&nbsp;</i></a></li></ul><div class="visible-lg visible-md visible-sm site-nav-footer"><br class="site-nav-footer-br"><footer><p>&copy;&nbsp;2020&nbsp;<a target="_blank" href="https://github.com/PL-FE" rel="noopener noreferrer">pengliang</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div><div id="main-container" class="col-sm-9 col-xs-12 main-container invisible"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post-container"><h1 class="post-title">Chrome Devtools的调试技巧</h1><p class="post-meta"><span class="date meta-item">发布于&nbsp;2020-05-23</span><span class="meta-item"><i class="fa fa-folder"></i><span>&nbsp;</span><a href="/categories/浏览器/" title="浏览器" class="a-tag">浏览器</a><span>&nbsp;</span></span><span class="meta-item"><i class="fa fa-tag"></i><span>&nbsp;</span><a href="/tags/效率/" title="效率" class="a-tag">效率</a><span>&nbsp;</span></span></p><p class="post-abstract"><p><img src="./chrome-devtools/Chrome-DevTools.jpg" alt="Chrome-DevTools"></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<p>我们每天都在写 <del>bug</del> 代码，那么拥有一身流畅的调试本领是十分重要的，下面是我总结一些实用的调试技巧，使无论在开发环境、生产环境都能够第一时间定位问题</p>
+</blockquote>
+
+    <div class="cplayer-template"
+      id="cplayer-43525182"
+      data-id="cplayer-43525182"
+      data-playlist=%5B%7B%22name%22%3A%22loading...%22%2C%22artist%22%3A%22loading...%22%7D%5D
+      data-ids=[526464145,288307]
+      data-autoplay="false"
+      style="position: relative"
+    ></div>
+    <script>
+      (function(){
+
+        let getLyric = id => {
+          return new Promise((resolve, reject) => {
+            fetch("https://api.imjad.cn/cloudmusic/?type=lyric&id=" + id).then(res => {
+              return res.json()
+            }).then(data => {
+              // console.log(data)
+              if(!data.lrc){
+                data = Object.assign(data, {
+                  lrc: {lyric: '[00:00.00]找不到歌词的说…(⊙﹏⊙)[99:00.00]'},
+                  tlyric: {lyric: '[00:00.00]翻译不存在的说…╮(╯▽╰)╭[99:00.00]'}
+                })
+              }
+              let obj = {
+                lyric: data.lrc.lyric,
+                tlyric: data.tlyric.lyric
+              }
+              resolve(obj);
+            })
+          })
+        }
+
+        function loadcplayer() {
+          if (typeof window.cplayerList === 'undefined') window.cplayerList = {};
+          if (typeof window.cplayerList["cplayer-43525182"] !== 'undefined') return;
+          if (!cplayer.prototype.add163) cplayer.prototype.add163 = async function add163(id) {
+            if (!id) throw new Error("Unable Property.");
+            let lyric = await getLyric(id);
+            // console.log(lyric)
+
+            return fetch("https://api.imjad.cn/cloudmusic/?type=detail&id=" + id).then(function(res){return res.json()}).then(function(data){
+              let obj = {
+                name: data.songs[0].name,
+                artist: data.songs[0].ar.map(function(ar){ return ar.name }).join(','),
+                poster: data.songs[0].al.picUrl,
+                lyric: lyric.lyric,
+                sublyric: lyric.tlyric,
+                src: 'https://api.imjad.cn/cloudmusic/?type=song&raw=true&id=' + id
+              }
+              this.add(obj);
+              return obj;
+            }.bind(this))
+          }
+
+          window.cplayerList["cplayer-43525182"] = new cplayer({
+            element: document.getElementById("cplayer-43525182"),
+            playlist: [{"name":"loading...","artist":"loading..."}],
+            generateBeforeElement: false,
+            deleteElementAfterGenerate: false,
+            autoplay: false,
+            zoomOutKana: true,
+            style: `c-player {
+                      font-size: 16px !important;
+                      position: relative;
+                      left: 50%;
+                      transform: translateX(-50%);
+                      width: auto;
+                      max-width: 550px;
+                      margin: 30px auto;
+                    }
+                    c-player .cp-controls{
+                      user-select: none;
+                    }
+                    c-player .cp-lyric{
+                      width: 100%;
+                      margin: 0.41667em 0;
+                    }
+                    c-player .cp-play-button .cp-play-icon.cp-play-icon-paused {
+                      margin-left: 0.8em;
+                    }
+                    @media (max-width: 768px) {
+                      c-player{
+                        font-size: 12px !important;
+                        left: auto;
+                        transform: none;
+                        width: 100%;
+                        margin: 10px auto;
+                      }
+                      c-player .cp-mainbody{
+                        min-height: 5.16667em;
+                      }
+                      c-player .cp-poster{
+                        width: 5.16667em;
+                        height: 5.16667em;
+                      }
+                      c-player .cp-center-container{
+                        height: 5.16667em;
+                      }
+                      c-player .cp-play-button, c-player .cp-volume-button, c-player .cp-prev-button, c-player .cp-list-button, c-player .cp-mode-button, c-player .cp-next-button{
+                        width: 1.54167em;
+                        height: 1.54167em;
+                      }
+                      c-player .cp-icon, c-player .cp-prev-icon, c-player .cp-next-icon, c-player .cp-volume-icon, c-player .cp-random-icon, c-player .cp-single-icon, c-player .cp-loop-icon, c-player .cp-list-icon{
+                        height: 1.54167em;
+                        width: 1.54167em;
+                      }
+                      c-player .cp-play-button{
+                        height: 2.8em;
+                        width: 2.8em;
+                      }
+                      c-player .cp-play-button .cp-play-icon{
+                        margin: 0.8em;
+                      }
+                      c-player .cp-play-button .cp-play-icon.cp-play-icon-paused {
+                        margin: 0.7875em;
+                        margin-left: 1em;
+                      }
+                      c-player .cp-volume-icon {
+                        width: 1.76667em;
+                      }
+                      c-player .cp-list-button {
+                        width: 1.54167em;
+                        height: 1.54167em;
+                      }
+                      c-player .cp-mode-button {
+                        width: 1.54167em;
+                        height: 1.54167em;
+                      }
+                    }
+                    `
+          });
+
+          window.cplayerList["cplayer-43525182"].add163(526464145),window.cplayerList["cplayer-43525182"].add163(288307)
+
+          let player = window.cplayerList["cplayer-43525182"]
+          player.to(1)
+          player.remove(player.playlist[0])
+        }
+        
+        if (typeof window.cplayer === 'undefined' && !document.getElementById("cplayer-script")) {
+          var js = document.createElement("script");
+          js.src = 'https://cdn.jsdelivr.net/gh/MoePlayer/cPlayer/dist/cplayer.js';
+          js.id = "cplayer-script";
+          js.addEventListener("load", loadcplayer);
+          document.body.appendChild(js);
+        } else {
+          window.addEventListener("load", loadcplayer);
+        }
+      })()
+    </script>
+
+<hr>
+<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>下面你将了解 </p>
+<ul>
+<li>$</li>
+<li>$$</li>
+<li>$0~$4</li>
+<li>$_</li>
+<li>console.table</li>
+<li>Store as global</li>
+<li>copy()</li>
+<li>Snippets</li>
+<li>断点调试</li>
+<li>command 菜单</li>
+<li>常用快捷键</li>
+</ul>
+<h3 id="Console面板-“-”"><a href="#Console面板-“-”" class="headerlink" title="Console面板-“$”"></a>Console面板-“$”</h3><p>Console 面板是我们最喜欢打开的面板之一，可以用来查看输出的信息以及查询 api</p>
+<p> <code>$</code> 在 JQuery 它是选择器，那么在 Console 面板中它是 <code>document.querySelector</code>的简写</p>
+<p><img src="./chrome-devtools/$%E7%9A%84%E7%94%A8%E6%B3%95.png" alt="$的用法"></p>
+<p><code>$$</code> 是 <code>document.QuerySelectorAll</code> 的简写，并且返回的是一个数组，而不是一个 <code>Node List</code></p>
+<p><img src="./chrome-devtools/$$%E7%9A%84%E7%94%A8%E6%B3%95.png" alt="$$的用法"></p>
+<p><code>$0</code> 是最后选择的 DOM 元素, <code>$1</code>是相对<code>$0</code>再上一个选择的元素，<code>$3、$4</code> 同理</p>
+<p><img src="./chrome-devtools/$0~$4%E7%9A%84%E7%94%A8%E6%B3%95.gif" alt="$0~$4的用法"></p>
+<p><code>$_</code>与元素无关，它是控制台最后输出的值</p>
+<p><img src="./chrome-devtools/$_%E7%9A%84%E7%94%A8%E6%B3%95.png" alt="$_的用法"></p>
+<p>当 <code>$</code> 遇上 <code>Vue</code>, 我们很轻松能够访问 Vue 的实例对象，尤其是在【生产环境】，没有 <code>Vue.js devtools</code>的时候，定位问题十分方便</p>
+<p><img src="./chrome-devtools/$%E4%B8%8EVue.png" alt="$与Vue"></p>
+<h3 id="Console面板-通用"><a href="#Console面板-通用" class="headerlink" title="Console面板-通用"></a>Console面板-通用</h3><p><code>console.table</code> 以表格形式展示数据，能够更清楚展示对象及数组</p>
+<p><img src="./chrome-devtools/console.table%E7%9A%84%E7%94%A8%E6%B3%95.png" alt="console.table的用法"></p>
+<p><code>copy()</code> 指定内容到剪贴板, 如 copy($_)等</p>
+<p><img src="./chrome-devtools/copy()%E7%9A%84%E7%94%A8%E6%B3%95.gif" alt="copy()的用法"></p>
+<p><code>Store as global</code> 为对象或者数组取名字，在小三角处右键即可。方便后续调用以及或者 <code>copy()</code></p>
+<p><img src="./chrome-devtools/StoreAsGlobal.gif" alt="Store as global"></p>
+<h3 id="Snippets-代码块"><a href="#Snippets-代码块" class="headerlink" title="Snippets(代码块)"></a>Snippets(代码块)</h3><p>相信不少人吐槽 Console 面板的换行问题，那么大可把代码移步至 <code>Sources - Snippets</code><br>可以<code>正常换行</code>、<code>格式化代码</code>、<code>运行代码</code>、<code>持久储存</code>在浏览器中<br>Snippets + Console 面板 = 自带 API 的 JavaScript 编辑器<br>平时刷题，尤其是算法题时，能少打开一个应用就少打开一个应用😚</p>
+<blockquote>
+<p>牛客网考试时，使用这个就不错，十分轻量级，一个 Google Chrome 浏览器足矣 🥳</p>
+</blockquote>
+<p><img src="./chrome-devtools/Snippets.png" alt="Snippets(代码块)"></p>
+<h3 id="断点调试"><a href="#断点调试" class="headerlink" title="断点调试"></a>断点调试</h3><p>虽然 console.log 也能起到调试的作用，但是还是断点调试比较强大<br><img src="./chrome-devtools/debugger.png" alt="debugger"></p>
+<h3 id="command菜单"><a href="#command菜单" class="headerlink" title="command菜单"></a>command菜单</h3><p>快捷键 shift + ctrl + p</p>
+<p>截图： Google Chrome 浏览器自带截图存为图片功能，不需要插件</p>
+<ul>
+<li><code>Capture area screenshot</code> 选取截图（类似QQ截图）</li>
+<li><code>Capture full size screenshot</code> 长截图</li>
+<li><code>Capture node screenshot</code> 节点截图</li>
+<li><code>Capture screenshot</code> 可视区域截图</li>
+</ul>
+<p><img src="./chrome-devtools/captureScreenshot.gif" alt="Capture full size screenshot 长截图"></p>
+<blockquote>
+<p>既然说到截图，顺便安利下微软的 <a href="https://zh.snipaste.com/" target="_blank" rel="noopener">snipaste</a><br><code>免费无广告的可取色可调整透明度可看历史截图的一款贴图软件</code><br>可以说前端必备，减少在 UI 与 代码 以及浏览器切换的频率</p>
+</blockquote>
+<p>主题： theme  可选 dark / light </p>
+<p><img src="./chrome-devtools/darktheme.png" alt="darktheme"></p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>常用快捷键</p>
+<p><img src="./chrome-devtools/chrome-devtools%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.png" alt="chrome-devtools常用快捷键"></p>
+<hr>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>希望大家用不上，愿世界无 BUG </p>
+</p></div><div class="pagination"><p class="clearfix"><span class="pre pagbuttons"><a role="navigation" href="/Promise%E5%92%8CAsync%E4%B8%80%E6%AD%A5%E5%88%B0%E4%BD%8D.html" title="笔记-Promise和Async一步到位"><i class="fa fa-angle-double-left"></i>&nbsp;上一篇: 笔记-Promise和Async一步到位</a></span><span>&nbsp;</span><span class="next pagbuttons"><a role="navigation" href="/hello-hexo.html" title="Hello Hexo">下一篇: Hello Hexo&nbsp;<i class="fa fa-angle-double-right"></i></a></span></p></div><a id="comments"></a><div id="valine-container"></div><script>(function(){
+    if(typeof Valine !== 'undefined'){
+        new Valine({
+            el:'#valine-container',
+            appId: 'C5UQwaddmDNfGT2GyHq1RKN4-gzGzoHsz',
+            appKey: 'nwu3U2sv3JcUcitnVTaO22GS',
+            path: window.location.pathname,
+            avatar:'robohash',
+            serverURLs: 'https://leancloud.pengliang.online'
+        })
+    }
+}())
+</script></div></div></div><div class="visible-xs site-bottom-footer"><footer><p>&copy;&nbsp;2020&nbsp;<a target="_blank" href="https://github.com/PL-FE" rel="noopener noreferrer">pengliang</a></p><p>Theme&nbsp;<a target="_blank" href="https://github.com/SumiMakito/hexo-theme-typography" rel="noopener noreferrer">Typography</a>&nbsp;by&nbsp;<a target="_blank" href="https://www.keep.moe" rel="noopener noreferrer">Makito</a></p><p>Proudly published with&nbsp;<a target="_blank" href="https://hexo.io" rel="noopener noreferrer">Hexo</a></p></footer></div></div></div></div><script src="/js/jquery-3.1.0.min.js"></script><script src="/js/bootstrap.min.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script><script src="/js/google-analytics.js"></script><script src="/js/typography.min.js"></script><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"live2d_models/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/live2d_models/xxban.model.json"},"display":{"position":"right","width":325,"height":300,"hOffset":0,"vOffset":0},"log":false});</script></body></html>
